@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+  </body>
+  <script>
+    var socket = io();
+    var messages = document.getElementById("messages");
+    var form = document.getElementById("form");
+    var input = document.getElementById("input");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit("send-message", { message: input.value });
+        input.value = "";
+      }
+    });
+    socket.on("send-client", function (msg) {
+      const message = msg.message;
+      var item = document.createElement("li");
+      item.textContent = message;
+      messages.appendChild(item);
+    });
+  </script>
+</html>
